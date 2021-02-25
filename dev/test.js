@@ -2,49 +2,157 @@ const Blockchain = require('./blockchain');
 
 const bitcoin = new Blockchain();
 
-bitcoin.createNewBlock(1763, 'OUN90SGJ90N', '90SFDSVA9F09008N');
-bitcoin.createNewBlock(1395, 'OIFHW990FSN', 'NCAOI907FADV00VD');
-bitcoin.createNewBlock(8974, 'OUN90SGJ90N', 'SBN9S7VA69FV6A9F');
+bitcoin.createNewBlock(1974, '0000BFWI7965', '0000BNDKJ896AA0');
 
-console.log(bitcoin);
+bitcoin.createNewTransaction(50, 'CIAN0000AOUL3', 'ALAN0000DBAGO8');
 
-//Outputs:
+bitcoin.createNewBlock(0210, '0000KABDALFA', '0000HF087FW00WF');
 
-// Blockchain { chain: [], newTransasctions: [] }
+bitcoin.createNewTransaction(1000, 'RYAN0000VDG3', 'CIAN0000GBSRH4');
+bitcoin.createNewTransaction(10, 'RED0000ARGAZR634', 'DANA0000VSABD3');
+bitcoin.createNewTransaction(15, 'HALLIE0000NGOA0', 'SEAN0000NAFNA08');
+
+bitcoin.createNewBlock(0024, '0000BKSBFGSOW', '0000NVE8FWHNLS');
+
+console.log(bitcoin.chain[2]);
+
+// Outputs:
 
 /*
-
-Blockchain data structure and chain property with 3 block (objects):
 
 Blockchain {
   chain: [
     {
       index: 1,
-      timestamp: 1614223560848,
+      timestamp: 1614229072380,
       transactions: [],
-      nonce: 1763,
-      hash: '90SFDSVA9F09008N',
-      previousBlockHash: 'OUN90SGJ90N'
+      nonce: 1974,
+      hash: '0000BNDKJ896AA0',
+      previousBlockHash: '0000BFWI7965'
+    }
+  ],
+  pendingTransasctions: [],
+  pendingTransactions: [
+    {
+      amount: 50,
+      sender: 'CIAN0000AOUL3',
+      recipient: 'ALAN0000DBAGO8'
+    }
+  ]
+}
+*/
+
+/*
+
+Blockchain {
+  chain: [
+    {
+      index: 1,
+      timestamp: 1614229682515,
+      transactions: [],
+      nonce: 1974,
+      hash: '0000BNDKJ896AA0',
+      previousBlockHash: '0000BFWI7965'
     },
     {
       index: 2,
-      timestamp: 1614223560848,
-      transactions: [],
-      nonce: 1395,
-      hash: 'NCAOI907FADV00VD',
-      previousBlockHash: 'OIFHW990FSN'
-    },
-    {
-      index: 3,
-      timestamp: 1614223560848,
-      transactions: [],
-      nonce: 8974,
-      hash: 'SBN9S7VA69FV6A9F',
-      previousBlockHash: 'OUN90SGJ90N'
+      timestamp: 1614229682515,
+      transactions: [Array],
+      nonce: 136,
+      hash: '0000HF087FW00WF',
+      previousBlockHash: '0000KABDALFA'
     }
   ],
-  newTransasctions: [],
-  newTransactions: []
+  pendingTransactions: []
+}
+
+===========================================================================
+
+Cianteras-MBP:blockchain cianterajeanetterose$ node dev/test.js
+Look inside array at 2nd block in the chain for transaction array with object: 
+
+{
+  index: 2,
+  timestamp: 1614229753685,
+  transactions: [
+    {
+      amount: 50,
+      sender: 'CIAN0000AOUL3',
+      recipient: 'ALAN0000DBAGO8'
+    }
+  ],
+  nonce: 136,
+  hash: '0000HF087FW00WF',
+  previousBlockHash: '0000KABDALFA'
+}
+
+===========================================================================
+Blockchain {
+  chain: [
+    {
+      index: 1,
+      timestamp: 1614230563837,
+      transactions: [],
+      nonce: 1974,
+      hash: '0000BNDKJ896AA0',
+      previousBlockHash: '0000BFWI7965'
+    },
+    {
+      index: 2,
+      timestamp: 1614230563837,
+      transactions: [Array],
+      nonce: 136,
+      hash: '0000HF087FW00WF',
+      previousBlockHash: '0000KABDALFA'
+    }
+  ],
+  pendingTransactions: [
+    {
+      amount: 1000,
+      sender: 'RYAN0000VDG3',
+      recipient: 'CIAN0000GBSRH4'
+    },
+    {
+      amount: 10,
+      sender: 'RED0000ARGAZR634',
+      recipient: 'DANA0000VSABD3'
+    },
+    {
+      amount: 15,
+      sender: 'HALLIE0000NGOA0',
+      recipient: 'SEAN0000NAFNA08'
+    }
+  ]
+}
+
+====================================================================
+
+Cianteras-MBP:blockchain cianterajeanetterose$ node dev/test.js
+Pending transactions pushed/created when new block mined
+
+{
+  index: 3,
+  timestamp: 1614230936095,
+  transactions: [
+    {
+      amount: 1000,
+      sender: 'RYAN0000VDG3',
+      recipient: 'CIAN0000GBSRH4'
+    },
+    {
+      amount: 10,
+      sender: 'RED0000ARGAZR634',
+      recipient: 'DANA0000VSABD3'
+    },
+    {
+      amount: 15,
+      sender: 'HALLIE0000NGOA0',
+      recipient: 'SEAN0000NAFNA08'
+    }
+  ],
+  nonce: 20,
+  hash: '0000NVE8FWHNLS',
+  previousBlockHash: '0000BKSBFGSOW'
 }
 
 */
