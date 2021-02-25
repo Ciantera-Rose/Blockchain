@@ -26,4 +26,6 @@ Blockchain.prototype.getLastBlock = function () {
   return this.chain[this.chain.length - 1];
 };
 
+Blockchain.prototype.createNewtransaction = function () {};
+
 module.exports = Blockchain;
