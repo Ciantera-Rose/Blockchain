@@ -40,4 +40,13 @@ Blockchain.prototype.createNewTransaction = function (
 
   return this.getLastBlock()['index'] + 1;
 };
+
+Blockchain.prototype.hashBlock = function () {
+  // ... return "90HFW90EWN907FSG7SD0870607SD700SD7F"
+};
+
+// TODO
+// use SHA256 hashing function
+// Takes any text input and generates a new fixed length string on each keystroke
+
 module.exports = Blockchain;
