@@ -54,8 +54,25 @@ Blockchain.prototype.hashBlock = function (
   return hash;
 };
 
-// TODO
-// use SHA256 hashing function
-// Takes any text input and generates a new fixed length string on each keystroke
+Blockchain.prototype.proofOfWork = function (
+  previousBlockHash,
+  currentBlockData
+) {
+  let nonce = 0;
+  let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
+
+  while (hash.substring(0, 4) !== '0000') {
+    nonce++;
+    hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
+    console.log(hash);
+  }
+  return nonce;
+};
+// bitcoin.hashBlock(previousBlock, currentBlockData, nonce)
+// repeat hash block until it finds correct hash => '0000HFNWOGF8689608FFV6VS0D06VS0'
+// uses current block data for the hash, but also the previousBlockHash
+// contiuously changes nonce value until it finds the corrent hash
+// returns the nonce value that creates the correct hash
+// generate different multiple hashes that start with 4 0s when passing in same data ... nonce val ++
 
 module.exports = Blockchain;

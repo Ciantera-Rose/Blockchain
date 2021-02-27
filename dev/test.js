@@ -5,24 +5,32 @@ const bitcoin = new Blockchain();
 const previousBlockHash = '0H986Y9OHBO89689Y8960Y89BL';
 const currentBlockData = [
   {
-    amout: 10,
+    amount: 10,
     sender: 'JJP98097NY790800JUHOSOHA',
     recipient: 'AOHIHOSF897DS097G0S0S'
   },
   {
-    amout: 20,
+    amount: 20,
     sender: 'MVJDOSIHO97NY700JUHOVNDKI',
     recipient: 'ADNSBF9790S08DS70SSL0707'
   },
   {
-    amout: 300,
+    amount: 300,
     sender: 'JJJS08D7V0DS98S9FDG0SG8S',
     recipient: 'NOSNVDWHRHPIPS87060SV00S'
   }
 ];
-const nonce = 100;
 
-console.log(bitcoin.hashBlock(previousBlockHash, currentBlockData, nonce));
+console.log(bitcoin.hashBlock(previousBlockHash, currentBlockData, 65547));
+
+// console.log(bitcoin.proofOfWork(previousBlockHash, currentBlockData));
+// nonce = 65547 (took 65,547 iterations for proofOfWork function to find a hash that starts with four '0000')
+
+// =======================================================================
+
+//const nonce = 100;
+
+//console.log(bitcoin.hashBlock(previousBlockHash, currentBlockData, nonce));
 // c0e4180811bd3cc7bca3df4bb22441b373f57283a8f2a457b7ac0ac7031fcc27
 
 // bitcoin.createNewBlock(1974, '0000BFWI7965', '0000BNDKJ896AA0');
