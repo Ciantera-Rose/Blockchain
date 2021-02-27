@@ -2,26 +2,51 @@ const Blockchain = require('./blockchain');
 
 const bitcoin = new Blockchain();
 
-const previousBlockHash = '0H986Y9OHBO89689Y8960Y89BL';
-const currentBlockData = [
-  {
-    amount: 10,
-    sender: 'JJP98097NY790800JUHOSOHA',
-    recipient: 'AOHIHOSF897DS097G0S0S'
-  },
-  {
-    amount: 20,
-    sender: 'MVJDOSIHO97NY700JUHOVNDKI',
-    recipient: 'ADNSBF9790S08DS70SSL0707'
-  },
-  {
-    amount: 300,
-    sender: 'JJJS08D7V0DS98S9FDG0SG8S',
-    recipient: 'NOSNVDWHRHPIPS87060SV00S'
-  }
-];
+console.log(bitcoin);
 
-console.log(bitcoin.hashBlock(previousBlockHash, currentBlockData, 65547));
+/*
+   Returns Blockchain logged out and for the chain itself 
+   which is an array you can see that there is one object 
+   or one block inside of the chain. This is the genesis block and
+   now all blockchains will start with a genesis block.
+
+Blockchain {
+  chain: [
+    {
+      index: 1,
+      timestamp: 1614397684555,
+      transactions: [],
+      nonce: 100,
+      hash: '0',
+      previousBlockHash: '0'
+    }
+  ],
+  pendingTransactions: []
+}
+
+*/
+
+// const previousBlockHash = '0H986Y9OHBO89689Y8960Y89BL';
+// const currentBlockData = [
+//   {
+//     amount: 10,
+//     sender: 'JJP98097NY790800JUHOSOHA',
+//     recipient: 'AOHIHOSF897DS097G0S0S'
+//   },
+//   {
+//     amount: 20,
+//     sender: 'MVJDOSIHO97NY700JUHOVNDKI',
+//     recipient: 'ADNSBF9790S08DS70SSL0707'
+//   },
+//   {
+//     amount: 300,
+//     sender: 'JJJS08D7V0DS98S9FDG0SG8S',
+//     recipient: 'NOSNVDWHRHPIPS87060SV00S'
+//   }
+// ];
+
+// console.log(bitcoin.hashBlock(previousBlockHash, currentBlockData, 65547));
+// 0000449cb3f36e23a3a52b1588416ab5855c543269c5667abb6052e2883207e5 (generates hash on first try with correct nonce value)
 
 // console.log(bitcoin.proofOfWork(previousBlockHash, currentBlockData));
 // nonce = 65547 (took 65,547 iterations for proofOfWork function to find a hash that starts with four '0000')
