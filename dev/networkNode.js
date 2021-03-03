@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const Blockchain = require('./blockchain');
 const { v1: uuidv1 } = require('uuid');
 uuidv1();
+const port = process.argv[2];
 
 const nodeAddress = uuidv1().split('-').join('');
 
@@ -46,49 +47,8 @@ app.get('/mine', function (req, res) {
   res.json({ note: 'New block mined successfully', block: newBlock });
 });
 
-/*
-
-test endpoints:
-http://localhost:3000/blockchain : blockchain
-http://localhost:3000/mine: mines new block with corrent data and mining reward
-http://localhost:3000/blockchain: see newBlock in the blockchain with mining reward
-test additional mines...
-test add transactions in postman to add to pending transactions in blockchain
-test mine new block to get new transactions added to blockchain with miner reward
-test post new transactions and create new blocks
-
-{
-"chain": [
-{
-"index": 1,
-"timestamp": 1614737600412,
-"transactions": [],
-"nonce": 100,
-"hash": "0",
-"previousBlockHash": "0"
-},
-{
-"index": 2,
-"timestamp": 1614737734512,
-"transactions": [
-{
-"amount": 6.25,
-"sender": "00",
-"recipient": "0648d6b17bc611ebbb080150966a6549"
-}
-],
-"nonce": 18140,
-"hash": "0000b9135b054d1131392c9eb9d03b0111d4b516824a03c35639e12858912100",
-"previousBlockHash": "0"
-}
-],
-"pendingTransactions": []
-}
-
-*/
-
-app.listen(3000, function () {
-  console.log('listening on port 3000');
+app.listen(port, function () {
+  console.log(`listening on port ${port}`);
 });
 
 // Build out an API that allows you to interact with and add data to the Blockchain
