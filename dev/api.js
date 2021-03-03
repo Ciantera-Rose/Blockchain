@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const Blockchain = require('./blockchain');
+const { v1: uuidv1 } = require('uuid');
+uuidv1();
+
+const nodeAddress = uuidv1().split('-').join('');
 
 const bitcoin = new Blockchain();
 
@@ -20,32 +24,27 @@ app.post('/transaction', function (req, res) {
   );
   res.json({ note: `Transaction will be added in block ${blockIndex}.` });
 });
-// Gets back transaction will be added in block 2, genesis block aleady initiated
-/*
-Test Blockchain endpoint
-  {
-"chain": [
-{
-"index": 1,
-"timestamp": 1614732767270,
-"transactions": [],
-"nonce": 100,
-"hash": "0",
-"previousBlockHash": "0"
-}
-],
-"pendingTransactions": [
-{
-"amount": 300,
-"sender": "0AHOA00AFNABVJHHOF9S6S9YSA",
-"recipient": "AS986V98AYVOA806706707"
-}
-]
-}
 
-  */
+app.get('/mine', function (req, res) {
+  const lastBlock = bitcoin.getLastBlock();
+  const previousBlockHash = lastBlock['hash'];
+  const currentBlockData = {
+    transactions: bitcoin.pendingTransactions,
+    index: lastBlock['index'] + 1
+  };
 
-app.get('/mine', function (req, res) {});
+  const nonce = bitcoin.proofOfWork(previousBlockHash, currentBlockData);
+  const blockHash = bitcoin.hashBlock(
+    previousBlockHash,
+    currentBlockData,
+    nonce
+  );
+
+  bitcoin.createNewTransaction(6.25, '00', nodeAddress);
+
+  const newBlock = bitcoin.createNewBlock(nonce, previousBlockHash, blockHash);
+  res.json({ note: 'New block mined successfully', block: newBlock });
+});
 
 app.listen(3000, function () {
   console.log('listening on port 3000');
