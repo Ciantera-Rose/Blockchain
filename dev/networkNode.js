@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const Blockchain = require('./blockchain');
 const { v1: uuidv1 } = require('uuid');
 uuidv1();
+const axios = require('axios');
 const port = process.argv[2];
 
 const nodeAddress = uuidv1().split('-').join('');
@@ -47,20 +48,56 @@ app.get('/mine', function (req, res) {
   res.json({ note: 'New block mined successfully', block: newBlock });
 });
 
+// register a node w/ a node and that node will broadcast it to entire network
+axios.post('/register-and-broadcast-node', function (req, res) {
+  const newNodeUrl = req.body.newNodeUrl;
+  if (bitcoin.networkNodes.indexOf(newNodeUrl) == -1)
+    bitcoin.networkNodes.push(newNodeUrl);
+
+  const regNodesPromises = [];
+  bitcoin.networkNodes.forEach(networkNodeUrl => {
+    const requestOptions = {
+      url: networkNodeUrl + '/register-node',
+      method: 'POST',
+      body: { newNodeUrl: newNodeUrl },
+      json: true
+    };
+
+    regNodesPromises.push(axios(requestOptions));
+  });
+
+  Promise.all(regNodesPromises)
+    .then(data => {
+      const bulkRegisterOptions = {
+        url: newNodeUrl + '/register-nodes-bulk',
+        method: 'POST',
+        body: {
+          allNetworkNodes: [...bitcoin.networkNodes, bitcoin.currentNodeUrl]
+        },
+        json: true
+      };
+
+      return axios(bulkRegisterOptions);
+    })
+
+    .then(data => {
+      res.json({ note: 'New node registered with network successfully.' });
+    });
+});
+
+// register a node with the network (all other APIs will register new node url data)
+app.post('/register-node', function (req, res) {
+  const newNodeUrl = req.body.newNodeUrl;
+  const nodeNotAlreadyPresent = bitcoin.networkNodes.indexOf(newNodeUrl) == -1;
+  const notCurrentNode = bitcoin.currentNodeUrl !== newNodeUrl;
+  if (nodeNotAlreadyPresent && notCurrentNode)
+    bitcoin.networkNodes.push(newNodeUrl);
+  res.json({ note: 'New node registered successfully.' });
+});
+
+// register multiple nodes at once (will register all nodes data already present in network with the new node)
+app.post('/register-nodes-bulk', function (req, res) {});
+
 app.listen(port, function () {
   console.log(`listening on port ${port}`);
 });
-
-// Build out an API that allows you to interact with and add data to the Blockchain
-// Create a server using the Express.js library
-// Build out endpoints to interact with Blockchain
-
-// ENDPOINTS:
-// fetch entire blockchain to look at data inside of it
-//  app.get(‘/blockchain’, function (req, res) {})
-
-// create a new transaction
-// app.post(‘/transaction’, function (req, res) {})
-
-// mine a new block by using the proof of work method
-// app.get(‘/mine’, function (req, res) {})
