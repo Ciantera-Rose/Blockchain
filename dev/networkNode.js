@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 const Blockchain = require('./blockchain');
 const { v1: uuidv1 } = require('uuid');
 uuidv1();
@@ -10,9 +9,8 @@ const port = process.argv[2];
 const nodeAddress = uuidv1().split('-').join('');
 
 const bitcoin = new Blockchain();
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.get('/blockchain', function (req, res) {
   res.send(bitcoin);
@@ -49,7 +47,7 @@ app.get('/mine', function (req, res) {
 });
 
 // register a node w/ a node and that node will broadcast it to entire network
-axios.post('/register-and-broadcast-node', function (req, res) {
+app.post('/register-and-broadcast-node', function (req, res) {
   const newNodeUrl = req.body.newNodeUrl;
   if (bitcoin.networkNodes.indexOf(newNodeUrl) == -1)
     bitcoin.networkNodes.push(newNodeUrl);
@@ -71,17 +69,20 @@ axios.post('/register-and-broadcast-node', function (req, res) {
       const bulkRegisterOptions = {
         url: newNodeUrl + '/register-nodes-bulk',
         method: 'POST',
-        body: {
+        data: {
           allNetworkNodes: [...bitcoin.networkNodes, bitcoin.currentNodeUrl]
         },
         json: true
       };
 
-      return axios(bulkRegisterOptions);
+      axios(bulkRegisterOptions)
+        .then(() =>
+          res.json({ note: 'New node registered with network successfully.' })
+        )
+        .catch(console.log);
     })
-
-    .then(data => {
-      res.json({ note: 'New node registered with network successfully.' });
+    .catch(error => {
+      console.error(error.message);
     });
 });
 
@@ -98,6 +99,7 @@ app.post('/register-node', function (req, res) {
 // register multiple nodes at once (will register all nodes data already present in network with the new node)
 app.post('/register-nodes-bulk', function (req, res) {
   const allNetworkNodes = req.body.allNetworkNodes;
+
   allNetworkNodes.forEach(networkNodeUrl => {
     const nodeNotAlreadyPresent =
       bitcoin.networkNodes.indexOf(networkNodeUrl) == -1;
